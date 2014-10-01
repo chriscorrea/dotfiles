@@ -12,6 +12,7 @@ alias -g npm="cmd /c npm"
 alias -g ruby="C:/Ruby193/bin/ruby"
 alias -g julia="C:/Julia/bin/julia"
 alias -g python="C:/Python34/python"
+#alias -g sqlite3="C:/Sqlite3/sqlite3"
 alias -g cyg="alias cyg='apt-cyg -m http://mirrors.kernel.org/sources.redhat.com/cygwin/'"
 
 #aliasing all RubyGem wrappers
@@ -33,6 +34,7 @@ alias cds="cd ~/Documents/\~Workspace/Scripts"
 alias cdd="cd ~/Documents/"	
 alias cdh="cd ~/"
 alias cdv="cd ~/Documents/Development/"
+alias cdbox="cd ~/Dropbox"
 
 #map vi (v 7.3.* to vim 7.4.*)
 alias -g vi="vim"
@@ -61,6 +63,6 @@ alias -g recent='ls -gathG | head -10 '
 alias -g oldest='ls -gathG | tail -10'
 
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git ruby bower colorize gem github gnu-utils history node npm nvm python pip rake redis-cli sublime web-search)
+plugins=(colemak git ruby bower colorize gem github gnu-utils history node npm nvm python pip rake redis-cli sublime web-search)
 
 source $ZSH/oh-my-zsh.sh
