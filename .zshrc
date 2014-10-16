@@ -4,7 +4,7 @@ ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load.
 ZSH_THEME="blinks"
 
-# Example aliases
+# Basic aliases
 alias zshconfig="vi ~/.zshrc"
 alias ohmyzsh="cd ~/.oh-my-zsh"
 alias -g npm="cmd /c npm"
@@ -26,6 +26,12 @@ alias rspec='rspec.bat'
 alias cucumber='cucumber.bat'
 alias bundle='bundle.bat'
 
+#map vi (v 7.3.* to vim 7.4.*)
+alias -g vi="vim"
+
+#open all markdown files in directory in vim (for writing projects)
+alias markup='vim *.md'
+
 #alias -g irb="/cygdrive/c/Ruby193/bin/irb.bat"
 
 #directory mappings
@@ -35,9 +41,6 @@ alias cdd="cd ~/Documents/"
 alias cdh="cd ~/"
 alias cdv="cd ~/Documents/Development/"
 alias cdbox="cd ~/Dropbox"
-
-#map vi (v 7.3.* to vim 7.4.*)
-alias -g vi="vim"
 
 #quick directory navigation
 alias -g ..="cd .."
