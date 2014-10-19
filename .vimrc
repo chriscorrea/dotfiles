@@ -1,6 +1,5 @@
 filetype off
-execute pathogen#infect()
-
+"execute pathogen#infect()
 "call pathogen#runtime_append_all_bundles()
 
 " ===== Spacing and Tabs =====
@@ -20,7 +19,7 @@ set background=dark
   set number              " Show line numbering
   "set relativenumber     " new feature
   set ruler               " show line info on status bar 
-  set columns=80          " standard 80 column width 
+  "set columns=80          " standard 80 column width 
   set synmaxcol=200       " No highlight beyond col
   "set cursorline          " highlight the active line. Ugly. 
 
@@ -70,6 +69,18 @@ endif
 " avoid accidental help when aiming for <ESC>
   map <F1> :<CR>
   map! <F1> <Left><Right>
+
+" open help in vertical split
+  command -nargs=* -complete=help Help vertical belowright help <args>
+
+" ============================
+" ===== Split Bindings ======
+" ============================
+ " Set up resize-pane keys; similar to custom tmux mappings
+  nnoremap <C-w>/ :vertical res +5<CR>
+  nnoremap <C-w>\ :vertical res -5<CR>  
+  nnoremap <C-w>+ :res +5
+  nnoremap <C-w>- :res -5
 
 "=============================
 "==== DB Connection Strings ==
