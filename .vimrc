@@ -20,7 +20,7 @@ set background=dark
   set number              " Show line numbering
   "set relativenumber     " new feature
   set ruler               " show line info on status bar 
-  set columns=80          " standard 80 column width 
+  "set columns=80          " standard 80 column width 
   set synmaxcol=200       " No highlight beyond col
   "set cursorline          " highlight the active line. Ugly. 
 
@@ -42,15 +42,21 @@ if version >= 700
   au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
 endif
 
-" ============================
-" ===== Custom Bindings ======
-" ============================
+" cccccccccccccccccccccccccccc
+" ccccc Custom Bindings cccccc 
+" cccccccccccccccccccccccccccc 
 
 "map hh to escape in insert mode
   inoremap hh <ESC>
 
 "one less shift key to press...
   nnoremap ; :
+
+"navigate through buffers more quickly with [ prefix
+  nnoremap <silent> [b :bprevious<CR>
+  nnoremap <silent> ]b :bnext<CR>
+  nnoremap <silent> [B :bfirst<CR>
+  nnoremap <silent> ]B :blast<CR>
 
 "avoiding the arrows!
 "note: remap these to something useful in the future
