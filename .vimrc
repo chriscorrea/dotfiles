@@ -1,6 +1,5 @@
 filetype off
-execute pathogen#infect()
-
+"execute pathogen#infect()
 "call pathogen#runtime_append_all_bundles()
 
 " ===== Spacing and Tabs =====
@@ -76,6 +75,18 @@ endif
 " avoid accidental help when aiming for <ESC>
   map <F1> :<CR>
   map! <F1> <Left><Right>
+
+" open help in vertical split
+  command -nargs=* -complete=help Help vertical belowright help <args>
+
+" ============================
+" ===== Split Bindings ======
+" ============================
+ " Set up resize-pane keys; similar to custom tmux mappings
+  nnoremap <C-w>/ :vertical res +5<CR>
+  nnoremap <C-w>\ :vertical res -5<CR>  
+  nnoremap <C-w>+ :res +5
+  nnoremap <C-w>- :res -5
 
 "=============================
 "==== DB Connection Strings ==
