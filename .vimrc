@@ -93,5 +93,8 @@ endif
 "=============================
 "==== DB Connection Strings ==
 "=============================
-let g:dbext_default_profile_xxxx = 'type=SQLSRV:integratedlogin=1:host=xxxx:dbname=xxxx'
+
+if filereadable($HOME."/.vimrc.dbext")
+    source ${HOME}/.vimrc.dbext
+endif
 
