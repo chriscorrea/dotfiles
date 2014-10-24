@@ -13,6 +13,7 @@ alias -g ruby="C:/Ruby193/bin/ruby"
 alias -g julia="C:/Julia/bin/julia"
 alias -g python="C:/Python34/python"
 #alias -g sqlite3="C:/Sqlite3/sqlite3"
+alias -g sqlite=sqlite3
 alias -g cyg="alias cyg='apt-cyg -m http://mirrors.kernel.org/sources.redhat.com/cygwin/'"
 
 #aliasing all RubyGem wrappers
