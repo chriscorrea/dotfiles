@@ -1,5 +1,7 @@
+" ===== Pathogen.vim ========
+" manage plugins
 filetype off
-"execute pathogen#infect()
+execute pathogen#infect()
 "call pathogen#runtime_append_all_bundles()
 
 " ===== Spacing and Tabs =====
