@@ -7,14 +7,14 @@ ZSH_THEME="blinks"
 # Basic aliases
 alias zshconfig="vi ~/.zshrc"
 alias ohmyzsh="cd ~/.oh-my-zsh"
-alias -g npm="cmd /c npm"
+alias  npm="cmd /c npm"
 #alias -g gem="C:/Ruby193/bin/gem"
-alias -g ruby="C:/Ruby193/bin/ruby"
-alias -g julia="C:/Julia/bin/julia"
-alias -g python="C:/Python34/python"
+alias  ruby="C:/Ruby193/bin/ruby"
+alias  julia="C:/Julia/bin/julia"
+alias  python="C:/Python34/python"
 #alias -g sqlite3="C:/Sqlite3/sqlite3"
-alias -g sqlite=sqlite3
-alias -g cyg="alias cyg='apt-cyg -m http://mirrors.kernel.org/sources.redhat.com/cygwin/'"
+alias  sqlite=sqlite3
+alias  cyg="alias cyg='apt-cyg -m http://mirrors.kernel.org/sources.redhat.com/cygwin/'"
 
 #aliasing all RubyGem wrappers
 alias gem='gem.bat'
@@ -68,21 +68,21 @@ alias -g ....="cd ../../.."
 
 alias -g listening=lsof -Pan -i tcp -i udp
 
-alias -g 400='chmod 400'
-alias -g 600='chmod 600'
-alias -g 644='chmod 644'
-alias -g 700='chmod 700'    
-alias -g 755='chmod 755'
-alias -g 777='chmod 777'
+alias 400='chmod 400'
+alias 600='chmod 600'
+alias 644='chmod 644'
+alias 700='chmod 700'    
+alias 755='chmod 755'
+alias 777='chmod 777'
 
 
 #alias -g google='ping -c 10240000 google.com'
-alias -g find_file_name='find ./ -name'
+alias find_file_name='find ./ -name'
  
-alias -g lsa="ls -AlsG"
+alias lsa="ls -AlsG"
 #alias -g recent='ls -AlsGt | zmore '
-alias -g recent='ls -gathG | head -10 '
-alias -g oldest='ls -gathG | tail -10'
+alias recent='ls -gathG | head -10 '
+alias oldest='ls -gathG | tail -10'
 
 #################################
 ## Reminders
