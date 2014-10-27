@@ -19,6 +19,7 @@ set background=dark
   "set t_Co=256            " Terminal supports 256 colors
   "set title               " Change the terminal title
   set number              " Show line numbering
+  highlight LineNr ctermfg=DarkGray " edit line numbering color
   "set relativenumber     " new feature
   set ruler               " show line info on status bar 
   "set columns=80          " standard 80 column width 
