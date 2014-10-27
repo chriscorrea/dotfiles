@@ -24,6 +24,10 @@ set background=dark
   "set columns=80          " standard 80 column width 
   set synmaxcol=200       " No highlight beyond col
   "set cursorline          " highlight the active line. Ugly. 
+  set laststatus=2
+
+" ==== VIM-Airline Config ====
+let g:airline_theme="sol"
 
 "no need for vi compatibility, let's move on
 set nocompatible
@@ -35,13 +39,11 @@ set scrolloff=50
 "set syntax
 set vb
 
-set laststatus=1
-
-if version >= 700
-  highlight ModeMsg guibg=DarkCyan
-  au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=undercurl guisp=Magenta
-  au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
-endif
+"if version >= 700
+"  highlight ModeMsg guibg=DarkCyan
+"  au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=undercurl guisp=Magenta
+"  au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
+"endif
 
 " cccccccccccccccccccccccccccc
 " ccccc Custom Bindings cccccc 
