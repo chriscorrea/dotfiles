@@ -2,7 +2,8 @@
 ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
-ZSH_THEME="blinks"
+#ZSH_THEME="blinks"
+ZSH_THEME="correa"
 
 # Basic aliases
 alias zshconfig="vi ~/.zshrc"
@@ -83,6 +84,14 @@ alias lsa="ls -AlsG"
 #alias -g recent='ls -AlsGt | zmore '
 alias recent='ls -gathG | head -10 '
 alias oldest='ls -gathG | tail -10'
+
+################################
+## Term Config
+################################
+
+#force term-256
+export TERM=xterm-256color
+[ -n "$TMUX" ] && export TERM=screen-256color
 
 #################################
 ## Reminders
