@@ -52,8 +52,9 @@ set vb
 
 "map hh to escape in insert mode
   inoremap hh <ESC>
+  vnoremap hh <ESC>
 
-"one less shift key to press...
+"one less shift key to press dozens of times a day...
   nnoremap ; :
 
 "navigate through buffers more quickly with [ prefix
