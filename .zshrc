@@ -5,6 +5,45 @@ ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME="blinks"
 ZSH_THEME="correa"
 
+################################
+## VIM Mode  
+###############################
+
+bindkey -v
+
+bindkey '^P' up-history
+bindkey '^N' down-history
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+bindkey '^w' backward-kill-word
+bindkey '^r' history-incremental-search-backward
+
+precmd() { RPROMPT="" }
+
+function zle-line-init zle-keymap-select {
+   VIM_NORMAL="%{$fg_bold[red]%} [% NORMAL]%  %{$reset_color%}"
+   RPS1="${${KEYMAP/vicmd/$VIM_NORMAL}/(main|viins)/} $EPS1"
+   zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+  #vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+#function zle-line-finish {
+#  vim_mode=$vim_ins_mode
+#}
+#zle -N zle-line-finish
+
+# Fix a bug when you C-c in CMD mode: http://paulgoscicki.com/archives/2012/09/vi-mode-indicator-in-zsh-prompt/
+#function TRAPINT() {
+#  vim_mode=$vim_ins_mode
+#  return $(( 128 + $1 ))
+#}
+
+# reduce lag between modes (0.1s)
+export KEYTIMEOUT=1
+
 # Basic aliases
 alias zshconfig="vi ~/.zshrc"
 alias ohmyzsh="cd ~/.oh-my-zsh"
@@ -36,6 +75,7 @@ alias -s mkd vim
 alias -s rb vim
 alias -s py vim
 alias -s pdf xpdf
+alias -s sql vim
 
 #############################
 ## Aliases for directories
@@ -104,8 +144,7 @@ alias help.awk="echo -e 'awk' "
 
 alias help.vim="echo -e '\"{a-zA-z0-9} prefix for named register | :reg[isters] | m{a-zA-z} to set mark | :marks\n:[range]s[ubstitute]/{pattern}/{string}/[c][e][g][p][r][i][I] [count] ' "
 
-
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(colemak git ruby bower colorize gem github gnu-utils history node npm nvm python pip rake redis-cli sublime web-search)
+plugins=(colemak git ruby bower colorize gem github gnu-utils history node npm nvm python pip rake redis-cli sublime web-search vi-mode)
 
 source $ZSH/oh-my-zsh.sh
