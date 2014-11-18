@@ -51,7 +51,7 @@ alias  npm="cmd /c npm"
 #alias -g gem="C:/Ruby193/bin/gem"
 alias  ruby="C:/Ruby193/bin/ruby"
 alias  julia="C:/Julia/bin/julia"
-alias  python="C:/Python34/python"
+#alias  python="C:/Python34/python"
 #alias -g sqlite3="C:/Sqlite3/sqlite3"
 alias  sqlite=sqlite3
 alias  cyg="alias cyg='apt-cyg -m http://mirrors.kernel.org/sources.redhat.com/cygwin/'"
