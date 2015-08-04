@@ -5,6 +5,17 @@ ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME="blinks"
 ZSH_THEME="correa"
 
+###############################
+# VirtualEnv Support
+##############################
+bash activate() function activate() { export VIRTUAL_ENV_DISABLE_PROMPT='1'
+ source ~/.virtualenv/$1/bin/activate }
+
+
+function virtualenv_info {
+    [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
+}
+
 ################################
 ## VIM Mode  
 ###############################
@@ -18,11 +29,11 @@ bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 bindkey '^r' history-incremental-search-backward
 
-precmd() { RPROMPT="" }
+precmd() { RPROMPT="%{$fg_bold[black]%} $(virtualenv_info) %{$reset_color%}" }
 
 function zle-line-init zle-keymap-select {
    VIM_NORMAL="%{$fg_bold[red]%} [% NORMAL]%  %{$reset_color%}"
-   RPS1="${${KEYMAP/vicmd/$VIM_NORMAL}/(main|viins)/} $EPS1"
+   RPS1="${${KEYMAP/vicmd/$VIM_NORMAL}/(main|viins)/} $EPS1 ${PR_GREEN}$(virtualenv_info)"
    zle reset-prompt
 }
 
@@ -47,12 +58,7 @@ export KEYTIMEOUT=1
 # Basic aliases
 alias zshconfig="vi ~/.zshrc"
 alias ohmyzsh="cd ~/.oh-my-zsh"
-alias  npm="cmd /c npm"
-#alias -g gem="C:/Ruby193/bin/gem"
-#alias  ruby="C:/Ruby193/bin/ruby"
 alias  julia="C:/Julia/bin/julia"
-#alias  python="C:/Python34/python"
-#alias -g sqlite3="C:/Sqlite3/sqlite3"
 alias  sqlite=sqlite3
 alias  cyg="alias cyg='apt-cyg -m http://mirrors.kernel.org/sources.redhat.com/cygwin/'"
 
@@ -146,5 +152,11 @@ alias help.vim="echo -e '\"{a-zA-z0-9} prefix for named register | :reg[isters] 
 
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 plugins=(colemak git ruby bower colorize gem github gnu-utils history node npm nvm python pip rake redis-cli sublime web-search vi-mode)
+
+#python generic virtualenv
+source ~/.virtualenv/VIRTUAL/bin/activate
+
+# pip should only run if there is a virtualenv currently activated
+export PIP_REQUIRE_VIRTUALENV=true
 
 source $ZSH/oh-my-zsh.sh

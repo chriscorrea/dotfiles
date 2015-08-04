@@ -5,8 +5,8 @@ execute pathogen#infect()
 "call pathogen#runtime_append_all_bundles()
 
 " ===== Spacing and Tabs =====
-set tabstop=2
-set sw=2
+set tabstop=4
+set sw=4
 set expandtab
 set background=dark
 
