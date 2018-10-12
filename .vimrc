@@ -51,8 +51,8 @@ set vb
 " cccccccccccccccccccccccccccc 
 
 "map hh to escape in insert mode
-  inoremap hh <ESC>
-  vnoremap hh <ESC>
+  inoremap jj <ESC>
+  vnoremap jj <ESC>
 
 "one less shift key to press dozens of times a day...
   nnoremap ; :
