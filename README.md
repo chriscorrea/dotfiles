@@ -15,3 +15,5 @@ ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
 
 ln -s ~/.dotfiles/.minttyrc ~/.minttyrc
 
+ln -s ~/.dotfiles/config.fish ~/.config/fish/config.fish
+
