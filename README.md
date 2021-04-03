@@ -3,6 +3,10 @@ rm ~/.vimrc
 
 rm ~/.zshrc
 
+rm  ~/.minttyrc
+
+rm ~/.tmux.conf
+
 ln -s ~/.dotfiles/.vimrc ~/.vimrc 
 
 ln -s ~/.dotfiles/.zshrc ~/.zshrc
