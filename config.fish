@@ -5,18 +5,22 @@ source /anaconda3/etc/fish/conf.d/conda.fish
 alias ..="cd .."
 alias ...="cd ../.."
 
+#aliases for ls 
 alias l="ls -lh"
 alias ld="ls -l | grep '^d'"
 alias lsa="ls -lsa"
 alias lsd='ls -l | grep "^d"'
 
-alias doc="cd ~/Documents"
-alias dev="cd ~/Documents/development"
+#aliases to jump to frequently-used directories
+alias cdd="cd ~/Documents"
+alias cdv="cd ~/Documents/development"
+alias cdp="cd ~/Projects"
 alias cdh="cd ~"
 alias dl="cd ~/Downloads"
 
 set fish_greeting "🐟"
 
+#github-friendly prompt
 function fish_prompt --description 'Write out the prompt'
     # Just calculate these once, to save a few cycles when displaying the prompt
     if not set -q __fish_prompt_hostname
