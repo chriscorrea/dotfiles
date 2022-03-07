@@ -50,7 +50,7 @@ set vb
 " ccccc Custom Bindings cccccc 
 " cccccccccccccccccccccccccccc 
 
-"map hh to escape in insert mode
+"map hh to escape in insert mode (colemak-friendly)
   inoremap jj <ESC>
   vnoremap jj <ESC>
 
@@ -93,12 +93,3 @@ set vb
   nnoremap <C-w>\ :vertical res -5<CR>  
   nnoremap <C-w>+ :res +5
   nnoremap <C-w>- :res -5
-
-"=============================
-"==== DB Connection Strings ==
-"=============================
-
-if filereadable($HOME."/.vimrc.dbext")
-    source ${HOME}/.vimrc.dbext
-endif
-
