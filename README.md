@@ -11,6 +11,8 @@ rm  ~/.minttyrc
 
 rm ~/.tmux.conf
 
+rm ~/.config/fish/config.fish
+
 ln -s ~/dotfiles/.vimrc ~/.vimrc 
 
 ln -s ~/dotfiles/.zshrc ~/.zshrc
