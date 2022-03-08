@@ -1,5 +1,5 @@
 #enable conda
-source /anaconda3/etc/fish/conf.d/conda.fish
+source "$HOME/opt/anaconda3/etc/fish/conf.d/conda.fish"
 
 #Aliases (eagerly loaded - move to .config/fish/functions in future
 alias ..="cd .."
@@ -18,44 +18,45 @@ alias cdp="cd ~/Projects"
 alias cdh="cd ~"
 alias dl="cd ~/Downloads"
 
-set fish_greeting "🐟"
+set fish_greeting "🐟 🐟 🐟"
+
+
+# Fish git prompt
+set __fish_git_prompt_showdirtystate 'yes'
+set __fish_git_prompt_showstashstate 'yes'
+set __fish_git_prompt_showuntrackedfiles 'yes'
+set __fish_git_prompt_showupstream 'yes'
+set __fish_git_prompt_color_branch yellow
+set __fish_git_prompt_color_upstream_ahead green
+set __fish_git_prompt_color_upstream_behind red
+
+# Status Chars
+set -g __fish_git_prompt_char_upstream_ahead "↑"
+set -g __fish_git_prompt_char_upstream_behind "↓"
+set -g __fish_git_prompt_char_upstream_prefix ""
+
+set -g __fish_git_prompt_char_stagedstate "●"
+set -g __fish_git_prompt_char_dirtystate "✚"
+set -g __fish_git_prompt_char_untrackedfiles "…"
+set -g __fish_git_prompt_char_conflictedstate "✖"
+set -g __fish_git_prompt_char_cleanstate "✔"
+
+
 
 #github-friendly prompt
 function fish_prompt --description 'Write out the prompt'
-    # Just calculate these once, to save a few cycles when displaying the prompt
-    if not set -q __fish_prompt_hostname
-    set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
-    end
+    printf '%s@%s:%s%s%s%s$ ' $USER $__fish_prompt_hostname
+    set_color $fish_color_cwd
+    printf '%s' (prompt_pwd)
+    set_color normal
 
-    if not set -q __fish_prompt_normal
-    set -g __fish_prompt_normal (set_color normal)
-    end
+    printf '%s ' (__fish_git_prompt)
 
-    if not set -q __git_cb
-    set __git_cb ":"(set_color brown)(git branch ^/dev/null | grep \* | sed 's/* //')(set_color normal)""
-    end
-
-    switch $USER
-
-    case root
-
-    if not set -q __fish_prompt_cwd
-        if set -q fish_color_cwd_root
-            set -g __fish_prompt_cwd (set_color $fish_color_cwd_root)
-        else
-            set -g __fish_prompt_cwd (set_color $fish_color_cwd)
-        end
-    end
-
-    printf '%s@%s:%s%s%s%s# ' $USER $__fish_prompt_hostname "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" $__git_cb
-
-    case '*'
-
-    if not set -q __fish_prompt_cwd
-        set -g __fish_prompt_cwd (set_color $fish_color_cwd)
-    end
-
-    printf '%s@%s:%s%s%s%s$ ' $USER $__fish_prompt_hostname "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" $__git_cb
-
-    end
+    set_color normal
 end
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+eval /Users/chris/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+
