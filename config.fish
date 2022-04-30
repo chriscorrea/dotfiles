@@ -1,5 +1,8 @@
 #enable conda
-source "$HOME/opt/anaconda3/etc/fish/conf.d/conda.fish"
+# conda-managed init:
+# /<conda installation path>/bin/conda init fish
+
+
 
 #Aliases (eagerly loaded - move to .config/fish/functions in future
 alias ..="cd .."
