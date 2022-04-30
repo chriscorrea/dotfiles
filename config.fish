@@ -1,9 +1,3 @@
-#enable conda
-# conda-managed init:
-# /<conda installation path>/bin/conda init fish
-
-
-
 #Aliases (eagerly loaded - move to .config/fish/functions in future
 alias ..="cd .."
 alias ...="cd ../.."
@@ -58,8 +52,12 @@ function fish_prompt --description 'Write out the prompt'
     set_color normal
 end
 
+
+# initialize conda-managed configuration:
+# /(your conda installation path)/bin/conda init fish
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-eval /Users/chris/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+eval $HOME/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
