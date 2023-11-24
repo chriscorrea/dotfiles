@@ -1,5 +1,6 @@
 #enable conda
-source "$HOME/opt/anaconda3/etc/fish/conf.d/conda.fish"
+#source "$HOME/opt/anaconda3/etc/fish/conf.d/conda.fish"
+#source "(conda info --root)/etc/fish/conf.d/conda.fish"
 
 #Aliases (eagerly loaded - move to .config/fish/functions in future
 alias ..="cd .."
@@ -55,8 +56,37 @@ function fish_prompt --description 'Write out the prompt'
     set_color normal
 end
 
+function __auto_source_venv --on-variable PWD --description "Activate/Deactivate virtualenv on directory change"
+  status --is-command-substitution; and return
+
+  # Check if we are inside a git repository
+  if git rev-parse --show-toplevel &>/dev/null
+    set dir (realpath (git rev-parse --show-toplevel))
+  else
+    set dir (pwd)
+  end
+
+  # Find a virtual environment in the directory
+  set VENV_DIR_NAMES env .env venv .venv
+  for venv_dir in $dir/$VENV_DIR_NAMES
+    if test -e "$venv_dir/bin/activate.fish"
+      break
+    end
+  end
+
+  # Activate venv if it was found and not activated before
+  if test "$VIRTUAL_ENV" != "$venv_dir" -a -e "$venv_dir/bin/activate.fish"
+    source $venv_dir/bin/activate.fish
+  # Deactivate venv if it is activated but the directory doesn't exist
+  else if not test -z "$VIRTUAL_ENV" -o -e "$venv_dir"
+    deactivate
+  end
+end
+
+__auto_source_venv
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-eval /Users/chris/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+eval /opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
