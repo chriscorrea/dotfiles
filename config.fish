@@ -1,7 +1,3 @@
-#enable conda
-#source "$HOME/opt/anaconda3/etc/fish/conf.d/conda.fish"
-#source "(conda info --root)/etc/fish/conf.d/conda.fish"
-
 #Aliases (eagerly loaded - move to .config/fish/functions in future
 alias ..="cd .."
 alias ...="cd ../.."
@@ -89,4 +85,3 @@ __auto_source_venv
 # !! Contents within this block are managed by 'conda init' !!
 eval /opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
-
