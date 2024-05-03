@@ -6,6 +6,3 @@ Clone this repository to ~/dotfiles on local machine and, from [fish shell](http
 
 `./setup.fish`
 
-From fish shell, 
-`chmod +x <YOUR_FISH_SCRIPT_FILENAME`
-
