@@ -1,25 +1,11 @@
 # Instructions
 
-Clone repo to ~/dotfiles on local machine and run the following commands:
+Clone this repository to ~/dotfiles on local machine and, from [fish shell](https://fishshell.com/), run the following commands:
 
-```
-rm ~/.vimrc
+`chomd +x setup.fish`
 
-rm ~/.zshrc
+`./setup.fish`
 
-rm  ~/.minttyrc
+From fish shell, 
+`chmod +x <YOUR_FISH_SCRIPT_FILENAME`
 
-rm ~/.tmux.conf
-
-rm ~/.config/fish/config.fish
-
-ln -s ~/dotfiles/.vimrc ~/.vimrc 
-
-ln -s ~/dotfiles/.zshrc ~/.zshrc
-
-ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
-
-ln -s ~/dotfiles/.minttyrc ~/.minttyrc
-
-ln -s ~/dotfiles/config.fish ~/.config/fish/config.fish
-```
