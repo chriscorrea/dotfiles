@@ -40,12 +40,14 @@ set -g __fish_git_prompt_char_cleanstate "✔"
 
 #prompt w/ abbreviated username, PIPENV indicator, and git status
 function fish_prompt --description 'Write out the prompt'
-  if string length -q $USER > 10
+  #if test (string length -q $USER) -ge 10
+  if test (string length $USER) -gt 17
     set abbreviated_user 'cc'
   else
     set abbreviated_user $USER
   end
 
+  set_color brblack
   printf '%s@%s:%s%s%s%s$ ' $abbreviated_user $__fish_prompt_hostname
   set_color $fish_color_cwd
   printf '%s' (prompt_pwd)
@@ -53,7 +55,7 @@ function fish_prompt --description 'Write out the prompt'
 
   printf '%s ' (__fish_git_prompt)
   if test -n "$PIPENV_ACTIVE"
-      set_color cyan
+      set_color 62A
       echo -n "(pipenv) "
       set_color normal
   end
@@ -86,7 +88,7 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
   end
   #If Pipfile exists, show a message
   if test -e "Pipfile" -a -z "$PIPENV_ACTIVE"
-    set_color cyan
+    set_color 62A
     echo "🐟 Run 'pipenv shell' to activate virtualenv"
     set_color normal
   end
