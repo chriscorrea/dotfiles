@@ -17,7 +17,6 @@ alias dl="cd ~/Downloads"
 
 set fish_greeting "🐟 🐟 🐟"
 
-
 # Fish git prompt
 set __fish_git_prompt_showdirtystate 'yes'
 set __fish_git_prompt_showstashstate 'yes'
@@ -39,56 +38,55 @@ set -g __fish_git_prompt_char_conflictedstate "✖"
 set -g __fish_git_prompt_char_cleanstate "✔"
 
 
-
-#github-friendly prompt
+#prompt w/ abbreviated username, PIPENV indicator, and git status
 function fish_prompt --description 'Write out the prompt'
-    printf '%s@%s:%s%s%s%s$ ' $USER $__fish_prompt_hostname
-    set_color $fish_color_cwd
-    printf '%s' (prompt_pwd)
-    set_color normal
-
-    printf '%s ' (__fish_git_prompt)
-
-    set_color normal
-end
-
-# Auto-activate pipenv when entering a directory with a Pipfile
-function __fish_prompt
-  # Check for Pipfile
-  if test -e Pipfile
-      # Activate the pipenv virtual environment
-      pipenv shell --fancy
+  if string length -q $USER > 10
+    set abbreviated_user 'cc'
+  else
+    set abbreviated_user $USER
   end
+
+  printf '%s@%s:%s%s%s%s$ ' $abbreviated_user $__fish_prompt_hostname
+  set_color $fish_color_cwd
+  printf '%s' (prompt_pwd)
+  set_color normal
+
+  printf '%s ' (__fish_git_prompt)
+  if test -n "$PIPENV_ACTIVE"
+      set_color cyan
+      echo -n "(pipenv) "
+      set_color normal
+  end
+  
+  set_color normal
 end
+
 
 function __auto_source_venv --on-variable PWD --description "Activate/Deactivate virtualenv on directory change"
   status --is-command-substitution; and return
 
-  # Check if we are inside a git repository
+  # are we inside a git directory?
   if git rev-parse --show-toplevel &>/dev/null
-    set dir (realpath (git rev-parse --show-toplevel))
-  else
-    set dir (pwd)
-  end
-
-  # Find a virtual environment in the directory
-  set VENV_DIR_NAMES env .env venv .venv
-  for venv_dir in $dir/$VENV_DIR_NAMES
-    if test -e "$venv_dir/bin/activate.fish"
-      break
+    set gitdir (realpath (git rev-parse --show-toplevel))
+    set cwd (pwd -P)
+    # find the closest virtualenv starting from the current dir
+    while string match "$gitdir*" "$cwd" &>/dev/null
+      if test -e "$cwd/.venv/bin/activate.fish"
+        source "$cwd/.venv/bin/activate.fish" &>/dev/null 
+        return
+      else
+        set cwd (path dirname "$cwd")
+      end
     end
   end
-
-  # Activate venv if it was found and not activated before
-  if test "$VIRTUAL_ENV" != "$venv_dir" -a -e "$venv_dir/bin/activate.fish"
-    source $venv_dir/bin/activate.fish
-  # Deactivate venv if it is activated but the directory doesn't exist
-  else if not test -z "$VIRTUAL_ENV" -o -e "$venv_dir"
-    deactivate
+  # If virtualenv activated but we are not in a git directory, deactivate.
+  if test -n "$VIRTUAL_ENV"
+    if functions -q deactivate
+      deactivate
+    end
   end
 end
 
-__fish_prompt
 __auto_source_venv
 
 # >>> conda initialize >>>
