@@ -84,6 +84,12 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
       deactivate
     end
   end
+  #If Pipfile exists, show a message
+  if test -e "Pipfile" -a -z "$PIPENV_ACTIVE"
+    set_color cyan
+    echo "🐟 Run 'pipenv shell' to activate virtualenv"
+    set_color normal
+  end
 end
 
 __auto_source_venv
