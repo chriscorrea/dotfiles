@@ -52,6 +52,15 @@ function fish_prompt --description 'Write out the prompt'
     set_color normal
 end
 
+# Auto-activate pipenv when entering a directory with a Pipfile
+function __fish_prompt
+  # Check for Pipfile
+  if test -e Pipfile
+      # Activate the pipenv virtual environment
+      pipenv shell --fancy
+  end
+end
+
 function __auto_source_venv --on-variable PWD --description "Activate/Deactivate virtualenv on directory change"
   status --is-command-substitution; and return
 
@@ -79,9 +88,10 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
   end
 end
 
+__fish_prompt
 __auto_source_venv
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-eval /opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+#eval /opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
