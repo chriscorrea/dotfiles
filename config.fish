@@ -15,7 +15,7 @@ alias cdp="cd ~/Projects"
 alias cdh="cd ~"
 alias dl="cd ~/Downloads"
 
-set fish_greeting "🐟 🐟 🐟"
+set fish_greeting "🐟 $USER 🐟"
 
 # Fish git prompt
 set __fish_git_prompt_showdirtystate 'yes'
@@ -60,7 +60,6 @@ function fish_prompt --description 'Write out the prompt'
   
   set_color normal
 end
-
 
 function __auto_source_venv --on-variable PWD --description "Activate/Deactivate virtualenv on directory change"
   status --is-command-substitution; and return
