@@ -9,5 +9,5 @@ Clone this repository to ~/dotfiles on local machine and, from [fish shell](http
 ## iTerm Configuration
 1. Launch iTerm
 2. Type CMD+i and navigate to colors tab
-3. Load presets and import `base16.dark.256.itermcolors`
+3. Load presets and import *.itermcolors file from */iterm2*
 
