@@ -1,19 +1,18 @@
-#Aliases (eagerly loaded - move to .config/fish/functions in future
-alias ..="cd .."
-alias ...="cd ../.."
+#abbr for navigation
+abbr .. 'cd ..'
+abbr ... 'cd ../..'
 
-#aliases for ls 
-alias l="ls -lh"
-alias ld="ls -l | grep '^d'"
-alias lsa="ls -lsa"
-alias lsd='ls -l | grep "^d"'
+#abbr for ls 
+abbr l 'ls -Fogh'
+abbr lsa 'ls -Fogsa'
+abbr recent 'ls -Fogrt --color=always | tail -10'
+abbr oldest 'ls -Fogrt --color=always | head -10'
 
-#aliases to jump to frequently-used directories
-alias cdd="cd ~/Documents"
-alias cdv="cd ~/Documents/development"
-alias cdp="cd ~/Projects"
-alias cdh="cd ~"
-alias dl="cd ~/Downloads"
+#abbr to jump to frequently-used directories
+abbr cdh 'cd ~'
+abbr cdd 'cd ~/Documents'
+abbr cdp 'cd ~/Projects'
+abbr cdl 'cd ~/Downloads'
 
 set fish_greeting "🐟 $USER 🐟"
 
