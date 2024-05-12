@@ -14,6 +14,22 @@ abbr cdd 'cd ~/Documents'
 abbr cdp 'cd ~/Projects'
 abbr cdl 'cd ~/Downloads'
 
+#abbr for git
+abbr g 'git'
+abbr ga 'git add'
+abbr gb 'git branch'
+abbr gconfig 'git config --list'
+abbr gc 'git commit -C -s -m'
+abbr gco 'git checkout'
+abbr gcob 'git checkout -b'
+abbr gh 'git help'
+abbr gi 'git init'
+abbr gr 'git rm -r'
+abbr gs 'git status'
+abbr pull 'git pull'
+abbr push 'git push'
+abbr pushup 'git push --set-upstream origin'
+
 set fish_greeting "🐟 $USER 🐟"
 
 # Fish git prompt
