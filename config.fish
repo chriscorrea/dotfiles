@@ -19,7 +19,7 @@ abbr g 'git'
 abbr ga 'git add'
 abbr gb 'git branch'
 abbr gconfig 'git config --list'
-abbr gc 'git commit -C -s -m'
+abbr gc 'git commit -S -v -m'
 abbr gco 'git checkout'
 abbr gcob 'git checkout -b'
 abbr gh 'git help'
@@ -70,7 +70,7 @@ function fish_prompt --description 'Write out the prompt'
 
   printf '%s ' (__fish_git_prompt)
   if test -n "$PIPENV_ACTIVE"
-      set_color 62A
+      set_color magenta
       echo -n "(pipenv) "
       set_color normal
   end
