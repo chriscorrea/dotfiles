@@ -26,6 +26,7 @@ abbr gh 'git help'
 abbr gi 'git init'
 abbr gr 'git rm -r'
 abbr gs 'git status'
+abbr gsw 'git switch'
 abbr pull 'git pull'
 abbr push 'git push'
 abbr pushup 'git push --set-upstream origin'
@@ -56,7 +57,7 @@ set -g __fish_git_prompt_char_cleanstate "✔"
 #prompt w/ abbreviated username, PIPENV indicator, and git status
 function fish_prompt --description 'Write out the prompt'
   #if test (string length -q $USER) -ge 10
-  if test (string length $USER) -gt 17
+  if test (string length $USER) -gt 11
     set abbreviated_user 'cc'
   else
     set abbreviated_user $USER
