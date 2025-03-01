@@ -9,4 +9,7 @@ ln -s ~/dotfiles/.vimrc ~/.vimrc
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/dotfiles/.minttyrc ~/.minttyrc
-ln -s ~/dotfiles/config.fish ~/.config/fish/config.fish
+ln -sf ~/dotfiles/config.fish ~/.config/fish/config.fish
+
+ln -sf ~/dotfiles/init.lua ~/.hammerspoon/init.lua
+ln -sf ~/dotfiles/karabiner.json ~/.config/karabiner/karabiner.json
