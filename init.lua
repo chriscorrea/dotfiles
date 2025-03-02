@@ -1,17 +1,7 @@
 PaperWM = hs.loadSpoon("PaperWM")
-PaperWM:bindHotkeys({
-    -- switch to a new focused window in tiled grid
-    --focus_left  = {{"ctrl", "alt", "cmd"}, "left"},
-    --focus_right = {{"ctrl", "alt", "cmd"}, "right"},
-    --focus_up    = {{"ctrl", "alt", "cmd"}, "up"},
-    --focus_down  = {{"ctrl", "alt", "cmd"}, "down"},
-     
-    -- move windows around in tiled grid
-    --swap_left  = {{"ctrl", "alt", "cmd"}, ","},
-    --swap_right = {{"ctrl", "alt", "cmd"}, "."},
-    --swap_up    = {{"ctrl", "alt", "cmd"}, "'"},
-    --swap_down  = {{"ctrl", "alt", "cmd"}, "/"},
+local spaces = require("hs.spaces")
 
+PaperWM:bindHotkeys({
     -- colemak keybindings for home/upper row navigation
     focus_left = {{"ctrl", "alt", "cmd"}, "n"},
     focus_right = {{"ctrl", "alt", "cmd"}, "e"},
@@ -52,15 +42,19 @@ PaperWM:bindHotkeys({
     move_window_5 = {{"ctrl", "alt", "cmd", "shift"}, "5"},
     move_window_6 = {{"ctrl", "alt", "cmd", "shift"}, "6"},
 
+    -- mission control functions
+    expose = {{"ctrl", "alt", "cmd"}, "space"},
+    expose_all = {{"ctrl", "alt", "cmd"}, "tab"},
+
     -- CC
     switch_space_l       = { { "ctrl", "alt", "cmd" }, "left" },
     switch_space_r       = { { "ctrl", "alt", "cmd" }, "right" },
      
 })
-PaperWM.window_ratios = { 0.36, 0.64, 0.8, 0.95 }
+PaperWM.window_ratios = { 0.36, 0.5, 0.64, 0.9 }
 PaperWM:start()
 
--- App Switcher
+-- App Launch
 local function launch(bundleID, appName)
     local app = hs.application.get(bundleID)
     if app then
@@ -75,7 +69,7 @@ local function launch(bundleID, appName)
     end
 end
 
--- Define app shortcuts
+-- Define app launch shortcuts
 hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "V", function() 
     launch("com.microsoft.VSCode", "Visual Studio Code")
 end)
@@ -95,3 +89,52 @@ end)
 hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "A", function() 
     launch("com.anytype.Anytype", "AnyType")
 end)
+
+-- Spaces Controls
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function() 
+    spaces.toggleMissionControl()
+end)
+
+local spaces = require("hs.spaces")
+
+local function queryOllama(prompt)
+    local command = string.format([[curl -s http://localhost:11434/api/chat -d '{"model":"chrisllm","stream":false,"messages":[{"role":"user","content":"%s"}]}' | jq -r .message.content]], prompt)
+    
+    local task = hs.task.new("/bin/bash", function(exitCode, stdOut, stdErr)
+        if exitCode == 0 and stdOut then
+            -- Remove any quotes and newlines from the response
+            local cleanResponse = string.gsub(stdOut, '["\n]', '')
+            hs.alert.show(cleanResponse, {textSize = 11}, 5)
+        else
+            hs.alert.show("Error querying Ollama", 2)
+        end
+    end, {"-c", command})
+    
+    task:start()
+end
+
+--Get highlighted content
+function getHighlightedContent()
+    local originalPasteboard = hs.pasteboard.getContents()
+    hs.eventtap.keyStroke({"cmd"}, "c")
+    hs.timer.usleep(10000)
+    local highlightedContent = hs.pasteboard.getContents()
+    hs.pasteboard.setContents(originalPasteboard)
+    print (highlightedContent)
+    return highlightedContent
+end
+
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "q", function()
+    -- this is a proof of concept for prompting local llm with highlighted content
+    local highlightedContent = getHighlightedContent()
+    print (highlightedContent)
+    hs.alert.show("Thinking...", 1)
+    local prompt = "Write a single sentence response to this content: " .. highlightedContent
+    queryOllama(prompt)
+end)
+
+-- Window hints to shift focus via keyboard shortcut
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", function()
+    hs.hints.windowHints()
+end) 
+
