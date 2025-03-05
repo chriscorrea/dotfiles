@@ -1,5 +1,3 @@
-local spaces = require("hs.spaces")
-
 local function launchOrFocusOrRotate(app)
     local focusedWindow = hs.window.focusedWindow()
     local focusedWindowApp = focusedWindow:application()
@@ -95,6 +93,55 @@ hs.hotkey.bind({"ctrl", "alt", "cmd"}, "Z", function()
     end
 end)
 
+-- Shift active window to space
+local spaces = require("hs.spaces")
+
+local function moveWindowToSpace(space)
+    return function()
+        local win = hs.window.focusedWindow()
+        if not win then return end
+        
+        local screen = win:screen()
+        local spaceID = spaces.allSpaces()[screen:getUUID()][space]
+        
+        if spaceID then
+            spaces.moveWindowToSpace(win:id(), spaceID)
+            spaces.gotoSpace(spaceID)  -- Follow window to new space
+            hs.alert.show("Moved to Space " .. space, 1)
+        end
+    end
+end
+
+-- Bindings to move window to spaces 1-9
+for i = 1, 9 do
+    hs.hotkey.bind({"ctrl", "alt", "cmd"}, tostring(i), moveWindowToSpace(i))
+end
+
+-- move to next/previous space
+function moveToSpace(direction)
+    local spaces = hs.spaces.spacesForScreen()
+    local currentSpace = hs.spaces.focusedSpace()
+    local currentIndex = hs.fnutils.indexOf(spaces, currentSpace)
+    local targetIndex
+    
+    if direction == "next" then
+        targetIndex = (currentIndex % #spaces) + 1
+    elseif direction == "previous" then
+        targetIndex = ((currentIndex - 2) % #spaces) + 1
+    else
+        return
+    end
+    
+    local targetSpace = spaces[targetIndex]
+    hs.spaces.gotoSpace(targetSpace)
+end
+--Bindings
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "]", function() 
+    moveToSpace("next")
+end)
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "[", function() 
+    moveToSpace("previous")
+end)
 
 local function queryOllama(prompt)
     local command = string.format([[curl -s http://localhost:11434/api/chat -d '{"model":"chrisllm","stream":false,"messages":[{"role":"user","content":"%s"}]}' | jq -r .message.content]], prompt)
