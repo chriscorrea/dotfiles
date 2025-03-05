@@ -143,7 +143,7 @@ hs.hotkey.bind({"ctrl", "alt", "cmd"}, "[", function()
     moveToSpace("previous")
 end)
 
-local function queryOllama(prompt)
+local function displayOllamaResponse(prompt)
     local command = string.format([[curl -s http://localhost:11434/api/chat -d '{"model":"chrisllm","stream":false,"messages":[{"role":"user","content":"%s"}]}' | jq -r .message.content]], prompt)
     
     local task = hs.task.new("/bin/bash", function(exitCode, stdOut, stdErr)
@@ -157,6 +157,27 @@ local function queryOllama(prompt)
     end, {"-c", command})
     
     task:start()
+end
+
+local function queryOllama(prompt)
+    local response = nil
+    local command = string.format([[curl -s http://localhost:11434/api/chat -d '{"model":"chrisllm","stream":false,"messages":[{"role":"user","content":"%s"}]}' | jq -r .message.content]], prompt)
+    
+    local task = hs.task.new("/bin/bash", function(exitCode, stdOut, stdErr)
+        if exitCode == 0 and stdOut then
+            -- Remove any quotes and newlines from the response
+            response = string.gsub(stdOut, '["\n]', '')
+        else
+            print("Error querying Ollama:", stdErr)
+            response = "Error querying Ollama"
+        end
+    end, {"-c", command})
+    
+    task:setCallback(function() return response end)
+    task:start()
+    task:waitUntilExit()
+    
+    return response
 end
 
 --Get highlighted content
@@ -176,7 +197,67 @@ hs.hotkey.bind({"ctrl", "alt", "cmd"}, "q", function()
     print (highlightedContent)
     hs.alert.show("Thinking...", 1)
     local prompt = "Metaphors and synonyms: " .. highlightedContent
-    queryOllama(prompt)
+    displayOllamaResponse(prompt)
 end)
 
+-- Things 3 launch quick entry (with highlighted/copied text)
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "'", function()
+    -- Helper function to escape special characters for AppleScript
+    local function escapeForAppleScript(str)
+        if not str then return "" end
+        -- More thorough character escaping
+        str = string.gsub(str, '\\', '\\\\')  -- Must escape backslashes first
+        str = string.gsub(str, '"', '\\"')    -- Then escape quotes
+        str = string.gsub(str, '[\n\r\t]', ' ') -- Replace newlines and tabs
+        return str
+    end
 
+    -- Validate and save clipboard with timeout
+    local originalClipboard = hs.pasteboard.getContents()
+    if not originalClipboard then
+        hs.alert.show("Could not access clipboard", 2)
+        return
+    end
+    -- Get highlighted text with timeout protection
+    hs.eventtap.keyStroke({"cmd"}, "c")
+    hs.timer.usleep(20000)
+    local highlighted = hs.pasteboard.getContents()
+    
+    if not highlighted then
+        hs.pasteboard.setContents(originalClipboard)
+        --hs.alert.show("No text selected", 2)
+        return
+    end
+
+    -- Sanitize text and create AppleScript with error handling
+    local sanitizedText = escapeForAppleScript(highlighted)
+   
+    -- TODO: use loal llm to generate title/note/properties
+    local script = string.format([[tell application "Things3"
+        try
+            show quick entry panel with properties {name:"%s", notes:"%s", due date:(current date) + 7 * days} 
+            return true
+        on error errMsg
+            log errMsg
+            return false
+        end try
+    end tell]], sanitizedText:sub(1,25), sanitizedText:sub(1,500))
+
+    local success, result, descriptor = hs.osascript.applescript(script)
+    
+    -- Ensure clipboard restoration
+    hs.timer.doAfter(0.1, function()
+        if hs.pasteboard.getContents() ~= originalClipboard then
+            hs.pasteboard.setContents(originalClipboard)
+        end
+    end)
+    
+    -- Detailed error feedback
+    if success then
+        print("Successfully launched Things quick entry")
+    else
+        local errorMsg = descriptor and descriptor.NSLocalizedDescription or "Unknown error"
+        hs.alert.show("Things 3 Error: " .. errorMsg, 2)
+        print("Things 3 Error:", errorMsg)
+    end
+end)
