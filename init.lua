@@ -1,101 +1,100 @@
-PaperWM = hs.loadSpoon("PaperWM")
 local spaces = require("hs.spaces")
 
-PaperWM:bindHotkeys({
-    -- colemak keybindings for home/upper row navigation
-    focus_left = {{"ctrl", "alt", "cmd"}, "n"},
-    focus_right = {{"ctrl", "alt", "cmd"}, "e"},
-    focus_up = {{"ctrl", "alt", "cmd"}, "l"},
-    focus_down = {{"ctrl", "alt", "cmd"}, "m"},
-    
-    swap_left = {{"ctrl", "alt", "cmd"}, "i"},
-    swap_right = {{"ctrl", "alt", "cmd"}, "o"},
-    swap_up = {{"ctrl", "alt", "cmd"}, "u"},
-    swap_down = {{"ctrl", "alt", "cmd"}, ","},
-
-    -- position and resize focused window 
-    center_window = {{"ctrl", "alt", "cmd"}, "c"},
-    full_width    = {{"ctrl", "alt", "cmd"}, "v"},
-    cycle_width   = {{"ctrl", "alt", "cmd"}, "h"},
-    cycle_height  = {{"ctrl", "alt", "cmd"}, "j"},
-
-    reverse_cycle_width  = {{"ctrl", "alt", "cmd"}, "d"},
-    reverse_cycle_height = {{"ctrl", "alt", "cmd"}, "g"},
-
-    -- move focused window into / out of a column
-    slurp_in = {{"ctrl", "alt", "cmd"}, "9"},
-    barf_out = {{"ctrl", "alt", "cmd"}, "0"},
-
-    -- switch to a new Mission Control space
-    switch_space_1 = {{"ctrl", "alt", "cmd"}, "1"},
-    switch_space_2 = {{"ctrl", "alt", "cmd"}, "2"},
-    switch_space_3 = {{"ctrl", "alt", "cmd"}, "3"},
-    switch_space_4 = {{"ctrl", "alt", "cmd"}, "4"},
-    switch_space_5 = {{"ctrl", "alt", "cmd"}, "5"},
-    switch_space_6 = {{"ctrl", "alt", "cmd"}, "6"},
-
-    -- move focused window to a new space and tile
-    move_window_1 = {{"ctrl", "alt", "cmd", "shift"}, "1"},
-    move_window_2 = {{"ctrl", "alt", "cmd", "shift"}, "2"},
-    move_window_3 = {{"ctrl", "alt", "cmd", "shift"}, "3"},
-    move_window_4 = {{"ctrl", "alt", "cmd", "shift"}, "4"},
-    move_window_5 = {{"ctrl", "alt", "cmd", "shift"}, "5"},
-    move_window_6 = {{"ctrl", "alt", "cmd", "shift"}, "6"},
-
-    -- mission control functions
-    expose = {{"ctrl", "alt", "cmd"}, "space"},
-    expose_all = {{"ctrl", "alt", "cmd"}, "tab"},
-
-    -- CC
-    switch_space_l       = { { "ctrl", "alt", "cmd" }, "left" },
-    switch_space_r       = { { "ctrl", "alt", "cmd" }, "right" },
-     
-})
-PaperWM.window_ratios = { 0.36, 0.5, 0.64, 0.9 }
-PaperWM:start()
-
--- App Launch
-local function launch(bundleID, appName)
-    local app = hs.application.get(bundleID)
-    if app then
-        app:activate()
-    else
-        -- Try launching by bundle ID first
-        local succeeded = hs.application.launchOrFocusByBundleID(bundleID)
-        if not succeeded then
-            -- Fallback to launching by app name
-            hs.application.launchOrFocus(appName)
-        end
+local function launchOrFocusOrRotate(app)
+    local focusedWindow = hs.window.focusedWindow()
+    local focusedWindowApp = focusedWindow:application()
+    local focusedWindowAppName = focusedWindowApp:name()
+  
+    local focusedWindowPath = focusedWindowApp:path()
+  
+    -- extract application from path
+    local appNameOnDisk = string.gsub(focusedWindowPath,"/Applications/", "")
+    local appNameOnDisk = string.gsub(appNameOnDisk,".app", "")
+    local appNameOnDisk = string.gsub(appNameOnDisk,"/System/Library/CoreServices/","")
+  
+    -- If already focused, rotate windows
+    if focusedWindow and appNameOnDisk == app then
+      local appWindows = hs.application.get(focusedWindowAppName):allWindows()
+  
+      if #appWindows > 0 then
+          if app == "Finder" then
+            appWindows[#appWindows-1]:focus()
+          else
+            appWindows[#appWindows]:focus()
+          end
+      else 
+          hs.application.launchOrFocus(app)
+      end
+    else -- if not focused
+      hs.application.launchOrFocus(app)
     end
-end
+  end
+  
+-- Application switching for work tools
+hs.loadSpoon("AppWindowSwitcher")
+--:setLogLevel("debug") -- console debug 
+:bindHotkeys({
+    ["com.googlecode.iterm2"]        = {{"ctrl", "alt", "cmd"}, "t"},
+    ["fm.anytype.anytype"]           = {{"ctrl", "alt", "cmd"}, "a"},
+    ["com.microsoft.VSCode"]         = {{"ctrl", "alt", "cmd"}, "c"},
+    ["com.tinyspeck.slackmacgap"]    = {{"ctrl", "alt", "cmd"}, "s"},
+    ["us.zoom.xos"]                  = {{"ctrl", "alt", "cmd"}, "z"},
+    [{
+        "org.mozilla.firefoxdeveloperedition",
+        "org.mozilla.firefox"}]     = {{"ctrl", "alt", "cmd"}, "f"},
+})
 
--- Define app launch shortcuts
-hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "V", function() 
-    launch("com.microsoft.VSCode", "Visual Studio Code")
+--Mission ontrol
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "up", function()
+    hs.application.launchOrFocus("Mission Control.app")
+  end)
+
+--App Switching
+switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter{})
+hs.hotkey.bind('ctrl-alt-cmd', 'right', function() switcher_space:next() end)
+hs.hotkey.bind('ctrl-alt-cmd', 'left', function() switcher_space:previous() end)
+  
+-- expose instances
+expose = hs.expose.new(nil,{showThumbnails=false}) -- default windowfilter, no thumbnails
+expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
+--expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
+--expose_browsers = hs.expose.new{'Firefox Developer Edition','Firefox'} -- specialized expose using a custom windowfilter
+
+-- binding for expose
+hs.hotkey.bind('ctrl-cmd-alt','space','Expose',function()expose:toggleShow()end)
+hs.hotkey.bind('ctrl-cmd-alt','x','App Expose',function()expose_space:toggleShow()end)
+
+-- window switcher
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "Z", function()
+    local currentWindow = hs.window.focusedWindow()
+    local allWindows = hs.window.allWindows()
+
+    local onScreenWindows = hs.fnutils.filter(allWindows, function(w)
+        return w:screen() ~= nil
+    end)
+
+    if #onScreenWindows == 0 then return end
+    
+    if not currentWindow then
+        -- focus the first window
+        onScreenWindows[1]:focus()
+        hs.alert.show(onScreenWindows[1]:title(), 2)
+        return
+    end
+
+    -- Find current window index
+    local currentIndex = hs.fnutils.indexOf(onScreenWindows, currentWindow)
+    
+    -- Get next window or wrap around
+    local nextIndex = currentIndex and (currentIndex % #onScreenWindows) + 1 or 1
+    local nextWindow = onScreenWindows[nextIndex]
+    
+    if nextWindow then
+        nextWindow:focus()
+        hs.alert.show(nextWindow:title(), 1)
+    end
 end)
 
-hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "T", function() 
-    launch("com.googlecode.iterm2", "iTerm")
-end)
-
-hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "S", function() 
-    launch("com.slack.Slack", "Slack")
-end)
-
-hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "F", function() 
-    launch("org.mozilla.firefox", "Firefox", "Firefox Developer Edition")
-end)
-
-hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "A", function() 
-    launch("com.anytype.Anytype", "AnyType")
-end)
-
--- Spaces Controls
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "up", function() 
-    spaces.toggleMissionControl()
-end)
-
-local spaces = require("hs.spaces")
 
 local function queryOllama(prompt)
     local command = string.format([[curl -s http://localhost:11434/api/chat -d '{"model":"chrisllm","stream":false,"messages":[{"role":"user","content":"%s"}]}' | jq -r .message.content]], prompt)
@@ -129,12 +128,8 @@ hs.hotkey.bind({"ctrl", "alt", "cmd"}, "q", function()
     local highlightedContent = getHighlightedContent()
     print (highlightedContent)
     hs.alert.show("Thinking...", 1)
-    local prompt = "Write a single sentence response to this content: " .. highlightedContent
+    local prompt = "Metaphors and synonyms: " .. highlightedContent
     queryOllama(prompt)
 end)
 
--- Window hints to shift focus via keyboard shortcut
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", function()
-    hs.hints.windowHints()
-end) 
 
