@@ -1,3 +1,6 @@
+alias python=python3
+alias typora='open -a Typora'
+
 #abbr for navigation
 abbr .. 'cd ..'
 abbr ... 'cd ../..'
@@ -53,6 +56,8 @@ set -g __fish_git_prompt_char_untrackedfiles "…"
 set -g __fish_git_prompt_char_conflictedstate "✖"
 set -g __fish_git_prompt_char_cleanstate "✔"
 
+# paths
+fish_add_path (/usr/libexec/java_home -v 21)/bin
 
 #prompt w/ abbreviated username, PIPENV indicator, and git status
 function fish_prompt --description 'Write out the prompt'
